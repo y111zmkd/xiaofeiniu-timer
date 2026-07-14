@@ -27,3 +27,16 @@ test('service worker precaches the complete app shell', () => {
   for (const file of shell) assert.ok(worker.includes(`'${file}'`), `${file} is not precached`);
   assert.match(worker, /caches\.match\('\.\/index\.html'\)/);
 });
+
+test('Vercel serves update-sensitive PWA files with explicit headers', () => {
+  const config = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
+  const serviceWorker = config.headers.find((rule) => rule.source === '/sw.js');
+  const manifest = config.headers.find((rule) => rule.source === '/manifest.webmanifest');
+
+  assert.deepEqual(serviceWorker.headers, [
+    { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
+  ]);
+  assert.deepEqual(manifest.headers, [
+    { key: 'Content-Type', value: 'application/manifest+json' },
+  ]);
+});
