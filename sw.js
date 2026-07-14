@@ -1,6 +1,7 @@
-const CACHE_NAME = 'xiaofeiniu-shell-v2';
+const CACHE_NAME = 'xiaofeiniu-shell-v3';
+const HOME_URL = new URL('./', self.registration.scope).href;
 const APP_SHELL = [
-  '/',
+  './',
   './manifest.webmanifest',
   './assets/icon-180.png',
   './assets/icon-192.png',
@@ -32,11 +33,11 @@ self.addEventListener('fetch', (event) => {
         const response = await fetch(event.request);
         if (response.ok) {
           const cache = await caches.open(CACHE_NAME);
-          await cache.put('/', response.clone());
+          await cache.put(HOME_URL, response.clone());
         }
         return response;
       } catch {
-        return (await caches.match('/')) || Response.error();
+        return (await caches.match(HOME_URL)) || Response.error();
       }
     })());
     return;

@@ -66,5 +66,5 @@ document.querySelector('#clear').addEventListener('click',()=>controllers.forEac
 function setSummaryOperation(operation){summaryState.operation=operation;document.querySelector('#summary-add').setAttribute('aria-pressed',String(operation==='add'));document.querySelector('#summary-subtract').setAttribute('aria-pressed',String(operation==='subtract'));updateSummary()}
 document.querySelector('#summary-add').addEventListener('click',()=>setSummaryOperation('add'));document.querySelector('#summary-subtract').addEventListener('click',()=>setSummaryOperation('subtract'));
 document.querySelector('#summary-clear').addEventListener('click',()=>{summaryState.operation='add';summaryControllers.forEach(controller=>controller.reset(0));setSummaryOperation('add')});update();updateSummary();
-if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(()=>{})}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{})}
 </script></body></html>

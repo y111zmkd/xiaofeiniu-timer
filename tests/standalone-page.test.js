@@ -23,8 +23,9 @@ test('page exposes install metadata and registers offline support', () => {
   assert.match(page, /rel="manifest" href="\.\/manifest\.webmanifest"/);
   assert.match(page, /rel="apple-touch-icon" href="\.\/assets\/icon-180\.png"/);
   assert.match(page, /name="theme-color" content="#000000"/);
-  assert.match(page, /serviceWorker\.register\('\/sw\.js',\{scope:'\/'\}\)/);
-  assert.match(page, /serviceWorker\.register\('\/sw\.js',\{scope:'\/'\}\)\.catch\(\(\)=>\{\}\)/);
+  assert.match(page, /serviceWorker\.register\('\.\/sw\.js',\{scope:'\.\/'\}\)/);
+  assert.match(page, /serviceWorker\.register\('\.\/sw\.js',\{scope:'\.\/'\}\)\.catch\(\(\)=>\{\}\)/);
+  assert.doesNotMatch(page, /serviceWorker\.register\('\/sw\.js'/);
   assert.doesNotMatch(page, /window\.addEventListener\('load'.*serviceWorker/s);
 });
 

@@ -9,9 +9,9 @@ test('manifest defines the installable mobile app', () => {
   const manifest = JSON.parse(fs.readFileSync(path.join(root, 'manifest.webmanifest'), 'utf8'));
 
   assert.equal(manifest.name, '小飞牛计时');
-  assert.equal(manifest.id, '/');
-  assert.equal(manifest.start_url, '/');
-  assert.equal(manifest.scope, '/');
+  assert.equal(manifest.id, './');
+  assert.equal(manifest.start_url, './');
+  assert.equal(manifest.scope, './');
   assert.equal(manifest.display, 'standalone');
   assert.equal(manifest.theme_color, '#000000');
   assert.deepEqual(manifest.icons.map((icon) => icon.sizes), ['192x192', '512x512']);
@@ -20,7 +20,7 @@ test('manifest defines the installable mobile app', () => {
 test('service worker precaches the complete app shell', () => {
   const worker = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
   const shell = [
-    '/',
+    './',
     './manifest.webmanifest',
     './assets/icon-180.png',
     './assets/icon-192.png',
@@ -28,9 +28,12 @@ test('service worker precaches the complete app shell', () => {
   ];
 
   for (const file of shell) assert.ok(worker.includes(`'${file}'`), `${file} is not precached`);
-  assert.match(worker, /xiaofeiniu-shell-v2/);
-  assert.match(worker, /cache\.put\('\/'/);
-  assert.match(worker, /caches\.match\('\/'\)/);
+  assert.match(worker, /xiaofeiniu-shell-v3/);
+  assert.match(worker, /new URL\('\.\/', self\.registration\.scope\)\.href/);
+  assert.match(worker, /cache\.put\(HOME_URL/);
+  assert.match(worker, /caches\.match\(HOME_URL\)/);
+  assert.doesNotMatch(worker, /cache\.put\('\/'/);
+  assert.doesNotMatch(worker, /caches\.match\('\/'\)/);
 });
 
 test('Vercel serves update-sensitive PWA files with explicit headers', () => {
