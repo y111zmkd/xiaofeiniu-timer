@@ -22,16 +22,25 @@ test('service worker precaches the complete app shell', () => {
   const shell = [
     './',
     './manifest.webmanifest',
-    './assets/icon-180.png',
-    './assets/icon-192.png',
-    './assets/icon-512.png',
+    './assets/icon-180-v4.png',
+    './assets/icon-192-v4.png',
+    './assets/icon-512-v4.png',
   ];
 
   for (const file of shell) assert.ok(worker.includes(`'${file}'`), `${file} is not precached`);
-  assert.match(worker, /xiaofeiniu-shell-v3/);
+  assert.match(worker, /xiaofeiniu-shell-v4/);
   assert.match(worker, /new URL\('\.\/', self\.registration\.scope\)\.href/);
   assert.match(worker, /cache\.put\(HOME_URL/);
   assert.match(worker, /caches\.match\(HOME_URL\)/);
+  assert.match(worker, /async function updateHomeCache/);
+  assert.match(worker, /event\.waitUntil\(updatePromise\.then/);
+  assert.doesNotMatch(worker, /event\.waitUntil\(updateHomeCache\(event\.request\)/);
+  assert.match(worker, /async function isOfflineReady/);
+  assert.match(worker, /type: 'OFFLINE_READY'/);
+  assert.match(worker, /type === 'CHECK_OFFLINE_READY'/);
+  assert.match(worker, /if \(await isOfflineReady\(\)\)/);
+  assert.match(worker, /key\.startsWith\('xiaofeiniu-shell-'\)/);
+  assert.doesNotMatch(worker, /keys\.filter\(\(key\) => key !== CACHE_NAME\)/);
   assert.doesNotMatch(worker, /cache\.put\('\/'/);
   assert.doesNotMatch(worker, /caches\.match\('\/'\)/);
 });

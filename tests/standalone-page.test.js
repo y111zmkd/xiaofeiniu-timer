@@ -21,10 +21,13 @@ test('the page does not depend on an external calculator script', () => {
 
 test('page exposes install metadata and registers offline support', () => {
   assert.match(page, /rel="manifest" href="\.\/manifest\.webmanifest"/);
-  assert.match(page, /rel="apple-touch-icon" href="\.\/assets\/icon-180\.png"/);
+  assert.match(page, /rel="apple-touch-icon" href="\.\/assets\/icon-180-v4\.png"/);
   assert.match(page, /name="theme-color" content="#000000"/);
+  assert.match(page, /id="offline-status"/);
+  assert.match(page, /role="status" aria-live="polite"/);
   assert.match(page, /serviceWorker\.register\('\.\/sw\.js',\{scope:'\.\/'\}\)/);
-  assert.match(page, /serviceWorker\.register\('\.\/sw\.js',\{scope:'\.\/'\}\)\.catch\(\(\)=>\{\}\)/);
+  assert.match(page, /type==='OFFLINE_READY'/);
+  assert.match(page, /type:'CHECK_OFFLINE_READY'/);
   assert.doesNotMatch(page, /serviceWorker\.register\('\/sw\.js'/);
   assert.doesNotMatch(page, /window\.addEventListener\('load'.*serviceWorker/s);
 });

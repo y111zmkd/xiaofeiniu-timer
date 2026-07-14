@@ -19,4 +19,7 @@ test('README publishes GitHub Pages as the official URL', () => {
 
   assert.match(readme, new RegExp(productionUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   assert.doesNotMatch(readme, /正式网址：\[https:\/\/xiaofeiniu-timer\.vercel\.app/);
+  assert.match(readme, /已可离线使用/);
+  assert.match(readme, /删除旧的桌面入口/);
+  assert.match(readme, /手机流量/);
 });

@@ -8,6 +8,9 @@ const expectedIcons = [
   ['icon-180.png', 180],
   ['icon-192.png', 192],
   ['icon-512.png', 512],
+  ['icon-180-v4.png', 180],
+  ['icon-192-v4.png', 192],
+  ['icon-512-v4.png', 512],
 ];
 
 for (const [filename, size] of expectedIcons) {
