@@ -23,7 +23,21 @@ test('page exposes install metadata and registers offline support', () => {
   assert.match(page, /rel="manifest" href="\.\/manifest\.webmanifest"/);
   assert.match(page, /rel="apple-touch-icon" href="\.\/assets\/icon-180\.png"/);
   assert.match(page, /name="theme-color" content="#000000"/);
-  assert.match(page, /serviceWorker\.register\('\.\/sw\.js'\)/);
+  assert.match(page, /serviceWorker\.register\('\/sw\.js',\{scope:'\/'\}\)/);
+  assert.match(page, /serviceWorker\.register\('\/sw\.js',\{scope:'\/'\}\)\.catch\(\(\)=>\{\}\)/);
+  assert.doesNotMatch(page, /window\.addEventListener\('load'.*serviceWorker/s);
+});
+
+test('installed iPhone layout covers the safe areas with the app background', () => {
+  assert.match(page, /viewport-fit=cover/);
+  assert.match(page, /name="apple-mobile-web-app-capable" content="yes"/);
+  assert.match(page, /name="apple-mobile-web-app-status-bar-style" content="black-translucent"/);
+  assert.match(page, /name="apple-mobile-web-app-title" content="小飞牛计时"/);
+  assert.match(page, /env\(safe-area-inset-top\)/);
+  assert.match(page, /env\(safe-area-inset-bottom\)/);
+  assert.match(page, /position:fixed;inset:0/);
+  assert.match(page, /body::before\{[^}]*z-index:0[^}]*pointer-events:none/);
+  assert.match(page, /main\{[^}]*position:relative;z-index:1/);
 });
 
 test('uses start and end terminology', () => {
@@ -45,6 +59,11 @@ test('both calculator buttons use the same clear label', () => {
   assert.match(page, /id="clear" type="button">清空<\/button>/);
   assert.match(page, /id="summary-clear" type="button">清空<\/button>/);
   assert.doesNotMatch(page, />清空时间<\/button>/);
+});
+
+test('segment clear resets all four wheels to selected zero values', () => {
+  assert.match(page, /#clear'\)\.addEventListener\('click',\(\)=>controllers\.forEach\(controller=>controller\.reset\(0\)\)\)/);
+  assert.doesNotMatch(page, /#clear'\)\.addEventListener\('click'.*controller\.clear\(\)/);
 });
 
 test('mobile time controls are large and constrained to their card', () => {
